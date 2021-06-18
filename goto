@@ -1,0 +1,27 @@
+#!/bin/bash
+
+trap 'kill -SIGKILL $$' SIGINT
+trap 'kill -SIGTERM $$' SIGINT
+
+DATA=$(grep -v '^exit 255$' "$EXE" 2>/dev/null)
+if [[ ! $DATA ]]; then
+  echo "Usage: goto <label>" >&2
+  exit 1
+fi
+
+G2SBK='/^(if|case|while|for|until|select)/{:a;N;/(fi|esac|done)$/{/goto/{p;q};b};ba}'
+if grep -qo "$1" <<<"$DATA"; then
+  code=$(sed -nr "/^: +$1$/,//p" <<<"$DATA")
+  if [[ $(sed -nr "$G2SBK" <<<"$code") ]]; then
+    code=$(sed -nr "/^: +$1$/,/(fi|esac|done)$/p" <<<"$code")
+  fi
+  if [[ $(sed -nr '/^goto/p' <<<"$code" | head -1) ]]; then
+    code=$(sed -nr "/^: +$1$/,/^goto/p" <<<"$code")
+  fi
+  code=$(grep -v '^:' <<<"$code" | grep -v '^$' | awk '{$1=$1};1')
+  exec bash -c "$code"
+  exit
+else
+  echo "$(basename "$EXE"): label '$1' not found" >&2
+  exit 1
+fi
