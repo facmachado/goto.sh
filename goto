@@ -3,7 +3,7 @@
 trap 'kill -SIGKILL $$' SIGINT
 trap 'kill -SIGTERM $$' SIGINT
 
-DATA=$(grep -v '^exit 255$' "$EXE" 2>/dev/null)
+DATA=$(grep -v '^exit 255$' "$PROG" 2>/dev/null)
 if [[ ! $DATA ]]; then
   echo "Usage: goto <label>" >&2
   exit 1
@@ -22,6 +22,6 @@ if grep -qo "$1" <<<"$DATA"; then
   exec bash -c "$code"
   exit
 else
-  echo "$(basename "$EXE"): label '$1' not found" >&2
+  echo "$(basename "$PROG"): label '$1' not found" >&2
   exit 1
 fi

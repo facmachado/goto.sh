@@ -5,7 +5,6 @@ readonly src_dir=$(dirname "${BASH_SOURCE[0]}")
 source "$src_dir/goto.sh"
 
 : BEGIN
-goto a0
 
 : a0
 printf .

@@ -19,7 +19,7 @@ goto END
 
 : a2
 echo a2
-if test $((a % 2)) -eq 1; then
+if (((a % 2) == 1)); then
   goto a1
 else
   goto a0
@@ -27,7 +27,7 @@ fi
 
 : a3
 echo a3
-((a+=$((RANDOM % 2))))
+((a+=(RANDOM % 2)))
 goto a2
 
 : a4

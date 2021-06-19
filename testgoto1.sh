@@ -9,8 +9,7 @@ goto a3
 
 : a0
 echo a0
-# goto END
-goto a3
+goto END
 
 : a1
 echo a1

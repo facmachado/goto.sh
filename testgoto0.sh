@@ -7,5 +7,6 @@ source "$src_dir/goto.sh"
 : BEGIN
 
 uname -a
+goto a0
 
 : END
